@@ -3,8 +3,8 @@ package library.network.json;
 import com.google.gson.*;
 import library.model.Book;
 import library.model.User;
-import library.network.dto.BookDTO;
-import library.network.dto.BookQuantityDTO;
+import library.network.dto.BookReturnedDTO;
+import library.network.dto.BookBorrowedDTO;
 import library.network.rpcprotocol.Response;
 import library.network.rpcprotocol.ResponseType;
 
@@ -55,11 +55,11 @@ public class ResponseDeserializer implements JsonDeserializer<Response> {
     } else if (responseType.equals(ResponseType.ERROR.name())) {
       response = new Response.Builder().type(ResponseType.ERROR).build();
     } else if (responseType.equals(ResponseType.RETURN_BOOK.name())) {
-      BookDTO bookDTO = jsonDeserializationContext.deserialize(jsonObject.get("data"), BookDTO.class);
-      response = new Response.Builder().type(ResponseType.RETURN_BOOK).data(bookDTO).build();
+      BookReturnedDTO bookReturnedDTO = jsonDeserializationContext.deserialize(jsonObject.get("data"), BookReturnedDTO.class);
+      response = new Response.Builder().type(ResponseType.RETURN_BOOK).data(bookReturnedDTO).build();
     } else if (responseType.equals(ResponseType.BORROW_BOOK.name())) {
-      BookQuantityDTO bookQuantityDTO = jsonDeserializationContext.deserialize(jsonObject.get("data"), BookQuantityDTO.class);
-      response = new Response.Builder().type(ResponseType.BORROW_BOOK).data(bookQuantityDTO).build();
+      BookBorrowedDTO bookBorrowedDTO = jsonDeserializationContext.deserialize(jsonObject.get("data"), BookBorrowedDTO.class);
+      response = new Response.Builder().type(ResponseType.BORROW_BOOK).data(bookBorrowedDTO).build();
     }
 
     return response;

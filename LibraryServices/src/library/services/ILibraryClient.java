@@ -1,6 +1,6 @@
 package library.services;
 
 public interface ILibraryClient {
-  void bookUpdated(int bookId, int newQuantity) throws LibraryException;
-  void bookReturned(int bookId, String author, String title) throws LibraryException;
+  void bookBorrowed(int bookId, int newQuantity, boolean byThisUser) throws LibraryException;
+  void bookReturned(int bookId, String author, String title, boolean byThisUser) throws LibraryException;
 }

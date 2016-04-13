@@ -59,20 +59,25 @@ public class LibraryServerImpl implements ILibraryServer {
   @Override
   public void borrowBook(int userId, int bookId) throws LibraryException {
     int newQuantity = bookRepository.borrowBook(userId, bookId);
-    for (ILibraryClient libraryClient : loggedClients.values()) {
-      libraryClient.bookUpdated(bookId, newQuantity);
+    for (int keyUserId : loggedClients.keySet()) {
+      if (keyUserId != userId) {
+        loggedClients.get(keyUserId).bookBorrowed(bookId, newQuantity, false);
+      } else {
+        loggedClients.get(keyUserId).bookBorrowed(bookId, newQuantity, true);
+      }
+
     }
   }
 
   @Override
   public void returnBook(int userId, int bookId) throws LibraryException {
     Book returned = bookRepository.returnBook(userId, bookId);
-    for (ILibraryClient libraryClient : loggedClients.values()) {
-      libraryClient.bookReturned(returned.getId(), returned.getAuthor(), returned.getTitle());
+    for (int keyUserId : loggedClients.keySet()) {
+      if (keyUserId != userId) {
+        loggedClients.get(keyUserId).bookReturned(returned.getId(), returned.getAuthor(), returned.getTitle(), false);
+      } else {
+        loggedClients.get(keyUserId).bookReturned(returned.getId(), returned.getAuthor(), returned.getTitle(), true);
+      }
     }
-  }
-
-  private boolean isLogged(User u){
-    return loggedClients.get(u.getUserName())!=null;
   }
 }

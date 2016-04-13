@@ -4,8 +4,8 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import library.model.Book;
 import library.model.User;
-import library.network.dto.BookDTO;
-import library.network.dto.BookQuantityDTO;
+import library.network.dto.BookReturnedDTO;
+import library.network.dto.BookBorrowedDTO;
 import library.network.dto.UserBookDTO;
 import library.network.dto.UserDTO;
 import library.network.json.ResponseDeserializer;
@@ -182,16 +182,16 @@ public class LibraryServerRpcProxy implements ILibraryServer {
   private void handleUpdate(Response response){
     if (response.type() == ResponseType.BORROW_BOOK) {
       try {
-        BookQuantityDTO bookQuantityDTO = (BookQuantityDTO)response.data();
-        client.bookUpdated(bookQuantityDTO.getBookId(), bookQuantityDTO.getNewQuantity());
+        BookBorrowedDTO bookBorrowedDTO = (BookBorrowedDTO)response.data();
+        client.bookBorrowed(bookBorrowedDTO.getBookId(), bookBorrowedDTO.getNewQuantity(), bookBorrowedDTO.isByThisUser());
       } catch (LibraryException exception) {
 
       }
     }
     if (response.type() == ResponseType.RETURN_BOOK) {
       try {
-        BookDTO bookDTO = (BookDTO)response.data();
-        client.bookReturned(bookDTO.getId(), bookDTO.getAuthor(), bookDTO.getTitle());
+        BookReturnedDTO bookReturnedDTO = (BookReturnedDTO)response.data();
+        client.bookReturned(bookReturnedDTO.getId(), bookReturnedDTO.getAuthor(), bookReturnedDTO.getTitle(), bookReturnedDTO.isByThisUser());
       } catch (LibraryException exception) {
 
       }

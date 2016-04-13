@@ -4,8 +4,8 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import library.model.Book;
 import library.model.User;
-import library.network.dto.BookDTO;
-import library.network.dto.BookQuantityDTO;
+import library.network.dto.BookReturnedDTO;
+import library.network.dto.BookBorrowedDTO;
 import library.network.dto.UserBookDTO;
 import library.network.dto.UserDTO;
 import library.network.json.RequestDeserializer;
@@ -78,9 +78,9 @@ public class LibraryClientRpcWorker implements Runnable, ILibraryClient {
   }
 
   @Override
-  public void bookUpdated(int bookId, int newQuantity) throws LibraryException {
-    BookQuantityDTO bookQuantityDTO = new BookQuantityDTO(bookId, newQuantity);
-    Response response = new Response.Builder().type(ResponseType.BORROW_BOOK).data(bookQuantityDTO).build();
+  public void bookBorrowed(int bookId, int newQuantity, boolean byThisUser) throws LibraryException {
+    BookBorrowedDTO bookBorrowedDTO = new BookBorrowedDTO(bookId, newQuantity, byThisUser);
+    Response response = new Response.Builder().type(ResponseType.BORROW_BOOK).data(bookBorrowedDTO).build();
     try {
       sendResponse(response);
     } catch (IOException e) {
@@ -89,9 +89,9 @@ public class LibraryClientRpcWorker implements Runnable, ILibraryClient {
   }
 
   @Override
-  public void bookReturned(int bookId, String author, String title) throws LibraryException {
-    BookDTO bookDTO = new BookDTO(bookId, author, title);
-    Response response = new Response.Builder().type(ResponseType.RETURN_BOOK).data(bookDTO).build();
+  public void bookReturned(int bookId, String author, String title, boolean byThisUser) throws LibraryException {
+    BookReturnedDTO bookReturnedDTO = new BookReturnedDTO(bookId, author, title, byThisUser);
+    Response response = new Response.Builder().type(ResponseType.RETURN_BOOK).data(bookReturnedDTO).build();
     try {
       sendResponse(response);
     } catch (IOException e) {

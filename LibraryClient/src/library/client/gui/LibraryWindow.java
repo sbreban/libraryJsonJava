@@ -93,11 +93,8 @@ public class LibraryWindow extends JFrame{
             if (yourBooksTableModel.getById(selectedBook.getId()) != null) {
               JOptionPane.showMessageDialog(LibraryWindow.this, "You already have this book!", "ERROR", JOptionPane.ERROR_MESSAGE);
             } else {
-              selectedBook.setAvailable(selectedBook.getAvailable() - 1);
               try {
                 libraryClientController.borrowBook(selectedBook.getId());
-                BooksTableModel yoursBooksTableModel = (BooksTableModel) yourBooks.getModel();
-                yoursBooksTableModel.addBook(selectedBook);
                 clearSearch();
               } catch (LibraryException exception) {
                 JOptionPane.showMessageDialog(LibraryWindow.this, exception.getMessage(), "ERROR", JOptionPane.ERROR_MESSAGE);
@@ -133,8 +130,6 @@ public class LibraryWindow extends JFrame{
           Book selectedBook = yourBooksTableModel.get(yourBooks.convertRowIndexToModel(row));
           try {
             libraryClientController.returnBook(selectedBook.getId());
-            BooksTableModel yoursBooksTableModel = (BooksTableModel) yourBooks.getModel();
-            yoursBooksTableModel.removeById(selectedBook.getId());
             clearSearch();
           } catch (LibraryException exception) {
             JOptionPane.showMessageDialog(LibraryWindow.this, exception.getMessage(), "ERROR", JOptionPane.ERROR_MESSAGE);

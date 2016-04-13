@@ -65,7 +65,11 @@ public class LibraryClientController implements ILibraryClient {
   }
 
   @Override
-  public void bookUpdated(int bookId, int newQuantity) throws LibraryException {
+  public void bookBorrowed(int bookId, int newQuantity, boolean byThisUser) throws LibraryException {
+    if (byThisUser) {
+      Book borrowed = availableBooksTableModel.getById(bookId);
+      yourBooksTableModel.addBook(borrowed);
+    }
     if (newQuantity == 0) {
       availableBooksTableModel.removeById(bookId);
     } else {
@@ -75,7 +79,10 @@ public class LibraryClientController implements ILibraryClient {
   }
 
   @Override
-  public void bookReturned(int bookId, String author, String title) throws LibraryException {
+  public void bookReturned(int bookId, String author, String title, boolean byThisUser) throws LibraryException {
+    if (byThisUser) {
+      yourBooksTableModel.removeById(bookId);
+    }
     Book returnedBook = availableBooksTableModel.getById(bookId);
     if (returnedBook == null) {
       returnedBook = new Book(bookId, author, title, 1);

@@ -5,14 +5,16 @@ import java.io.Serializable;
 /**
  * Created by Sergiu on 05.04.2016.
  */
-public class BookDTO implements Serializable {
+public class BookReturnedDTO implements Serializable {
   private int id;
   private String author, title;
+  private boolean byThisUser;
 
-  public BookDTO(int id, String author, String title) {
+  public BookReturnedDTO(int id, String author, String title, boolean byThisUser) {
     this.id = id;
     this.author = author;
     this.title = title;
+    this.byThisUser = byThisUser;
   }
 
   public int getId() {
@@ -37,5 +39,13 @@ public class BookDTO implements Serializable {
 
   public void setTitle(String title) {
     this.title = title;
+  }
+
+  public boolean isByThisUser() {
+    return byThisUser;
+  }
+
+  public void setByThisUser(boolean byThisUser) {
+    this.byThisUser = byThisUser;
   }
 }
